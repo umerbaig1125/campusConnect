@@ -76,18 +76,26 @@ const LoginScreen = () => {
 
             const { name, _id, imageUrl, role } = response.data.user;
 
-            if (rememberMe) {
-                AsyncStorage.setItem('credentials', JSON.stringify({ email, password, name, _id, imageUrl, role }));
-            }
+            // if (rememberMe) {
+            AsyncStorage.setItem('credentials', JSON.stringify({ email, password, name, _id, imageUrl, role }));
+            console.log("email", email)
+            console.log("password", password)
+            console.log("name", name)
+            console.log("_id", _id)
+            console.log("imageUrl", imageUrl)
+            console.log("role", role)
+            // }
 
             if (email === 'admin@gmail.com' && password === password) {
                 navigation.navigate('AdminHome', { name, email, imageUrl, role });
             } else if (
                 role === 'user' ||
+                role === 'Events Society Member' ||
                 role === 'Sports Society Member' ||
                 role === 'Music Society Member' ||
-                role === 'Arts Society Member' ||
-                role === 'Robotics Society Member'
+                role === 'Media and Film Society Member' ||
+                role === 'Health and Fitness Member' ||
+                role === 'Debate Society Member'
             ) {
                 navigation.navigate('MemberHome', { name, email, imageUrl, role });
             } else {

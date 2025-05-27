@@ -86,20 +86,20 @@ const SocietyEventsScreen = () => {
     fetchTodayEvents();
   }, []);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axios.get('https://campus-connect-backend-eight.vercel.app/api/events');
-        setEvents(response.data); // backend should return an array of events
-      } catch (error) {
-        console.error('Failed to fetch events:', error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     try {
+  //       const response = await axios.get('https://campus-connect-backend-eight.vercel.app/api/events');
+  //       setEvents(response.data); // backend should return an array of events
+  //     } catch (error) {
+  //       console.error('Failed to fetch events:', error.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchEvents();
-  }, []);
+  //   fetchEvents();
+  // }, []);
 
   const getMonthAbbr = (dateStr) => {
     const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -127,42 +127,76 @@ const SocietyEventsScreen = () => {
 
   const getSocietyFromRole = (role) => {
     switch (role) {
+      case 'Events Society Member': return 'events';
       case 'Sports Society Member': return 'sports';
       case 'Music Society Member': return 'music';
-      case 'Arts Society Member': return 'arts';
-      case 'Robotics Society Member': return 'robotics';
+      case 'Media and Film Society Member': return 'media';
+      case 'Health and Fitness Member': return 'health';
+      case 'Debate Society Member': return 'debate';
       default: return '';
     }
   };
 
+  // const getStoredCredentials = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('credentials');
+  //     if (value !== null) {
+  //       const parsed = JSON.parse(value);
+  //       const userRole = parsed.role || '';
+  //       setRole(userRole);
+
+  //       console.log("userRole", userRole)
+
+  //       const society = getSocietyFromRole(userRole);
+  //       if (society) {
+  //         const res = await axios.get('https://campus-connect-backend-eight.vercel.app/api/events');
+  //         const filtered = res.data.filter(event =>
+  //           event.societyName && event.societyName.toLowerCase() === society.toLowerCase()
+  //         );
+  //         setEvents(filtered);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
   const getStoredCredentials = async () => {
     try {
+      setLoading(true); // Start loading
+
       const value = await AsyncStorage.getItem('credentials');
       if (value !== null) {
         const parsed = JSON.parse(value);
         const userRole = parsed.role || '';
         setRole(userRole);
 
-        console.log("userRole", userRole)
-
         const society = getSocietyFromRole(userRole);
         if (society) {
           const res = await axios.get('https://campus-connect-backend-eight.vercel.app/api/events');
           const filtered = res.data.filter(event =>
-            event.societyName && event.societyName.toLowerCase() === society.toLowerCase()
+            event.societyName &&
+            event.societyName.toLowerCase() === society.toLowerCase()
           );
           setEvents(filtered);
         }
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false); // End loading after everything is fetched
     }
   };
 
+  // useEffect(() => {
+  //   getStoredCredentials();
+  // }, []);
 
   useEffect(() => {
-    getStoredCredentials();
-  }, []);
+    if (userInfo.role) {
+      getStoredCredentials();
+    }
+  }, [userInfo.role]);
 
   return (
     <View className="flex-1 bg-white px-4 pt-16">
@@ -197,6 +231,7 @@ const SocietyEventsScreen = () => {
                     <TouchableOpacity
                       className="bg-[#ffe100] justify-center items-center py-1 px-2 w-24 mt-4"
                       onPress={() => navigation.navigate('MemberEventDetails', {
+                        _id: event._id,
                         name: event.name,
                         date: event.date,
                         time: event.time,

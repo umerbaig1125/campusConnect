@@ -16,7 +16,7 @@ const First = ({ onNext }) => {
                 {/* White overlay with opacity */}
                 <View className="absolute top-0 left-0 right-0 bottom-0 bg-white opacity-60" />
                 <Image
-                    className="h-[80%] w-[50%] mb-6"
+                    className="h-[60%] w-[50%] mb-6"
                     source={require('../../images/logo.png')}
                 />
             </ImageBackground>
@@ -45,15 +45,15 @@ const First = ({ onNext }) => {
 
                 {/* Image now positioned absolutely on top of SVG */}
                 <View className="flex-1 justify-center items-center">
-                    <Text className="text-white text-5xl font-bold mt-2">Welcome To</Text>
+                    <Text className="text-white text-4xl font-bold mt-2">Welcome To</Text>
                     <Text
-                        className="text-3xl font-bold mt-5"
+                        className="text-2xl font-bold mt-5"
                         style={{ color: '#ffe100' }}
                     >
                         Your Gateway to Campus Life
                     </Text>
-                    <Text className="text-white text-2xl text-center mt-5">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
+                    <Text className="text-white text-xl text-center mt-5">
+                        This app brings all societies and students together in one place — stay connected, collaborate, and never miss an update.
                     </Text>
                     <Image
                         source={require('../../images/first.png')}

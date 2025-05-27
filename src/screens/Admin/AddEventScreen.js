@@ -83,11 +83,16 @@ Write a 300-word professional event description covering:
     const getStoredCredentials = async () => {
         try {
             const value = await AsyncStorage.getItem('credentials');
+            console.log("value", value)
             if (value !== null) {
                 const parsed = JSON.parse(value);
                 setName(parsed.name || '');
                 setRole(parsed.role || '');
                 setUserId(parsed._id || ''); // Store the user ID as well
+
+                console.log("name", parsed.name)
+                console.log("role", parsed.role)
+                console.log("id", parsed._id)
             }
         } catch (error) {
             console.error('Error reading credentials from AsyncStorage:', error);
@@ -140,6 +145,9 @@ Write a 300-word professional event description covering:
 
         if (!name || !role || !userId) {
             alert('User details not found. Please login again.');
+            console.log("name", name)
+            console.log("role", role)
+            console.log("userId", userId)
             return;
         }
 
@@ -162,9 +170,11 @@ Write a 300-word professional event description covering:
             if (eventData && eventData._id) {
                 // PUT API call for updating an event
                 response = await axios.put(`https://campus-connect-backend-eight.vercel.app/api/events/${eventData._id}`, payload);
+                console.log("eventData", response)
             } else {
                 // POST API call for creating a new event
                 response = await axios.post('https://campus-connect-backend-eight.vercel.app/api/events', payload);
+                console.log("events", response)
             }
 
             if (response.status === 200 || response.status === 201) {
@@ -249,10 +259,12 @@ Write a 300-word professional event description covering:
                         }}
                     >
                         <Picker.Item label="Select Society" value="" />
+                        <Picker.Item label="Events Society" value="events" />
                         <Picker.Item label="Sports Society" value="sports" />
                         <Picker.Item label="Music Society" value="music" />
-                        <Picker.Item label="Arts Society" value="arts" />
-                        <Picker.Item label="Robotics Society" value="robotics" />
+                        <Picker.Item label="Media and Film Society" value="media" />
+                        <Picker.Item label="Health and Fitness Society" value="health" />
+                        <Picker.Item label="Debate Society" value="debate" />
                     </Picker>
                 </View>
 

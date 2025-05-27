@@ -17,7 +17,7 @@ const Second = ({ onNext, onBack }) => {
                 {/* White overlay with opacity */}
                 <View className="absolute top-0 left-0 right-0 bottom-0 bg-white opacity-60" />
                 <Image
-                    className="h-[80%] w-[50%] mb-6"
+                    className="h-[60%] w-[50%] mb-6"
                     source={require('../../images/logo.png')}
                 />
             </ImageBackground>
@@ -46,14 +46,14 @@ const Second = ({ onNext, onBack }) => {
 
                 {/* Image now positioned absolutely on top of SVG */}
                 <View className="flex-1 justify-center items-center">
-                    <Text className="text-white text-5xl mt-2 font-bold">Event</Text>
-                    <Text className="text-white text-5xl font-bold mt-2">Management</Text>
-                    <Text className="text-white text-2xl text-center mt-5">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
+                    <Text className="text-white text-4xl mt-2 font-bold">Event</Text>
+                    <Text className="text-white text-4xl font-bold mt-2">Management</Text>
+                    <Text className="text-white text-xl text-center mt-5">
+                        This app helps manage and streamline all events organized within your society — making coordination easier and participation seamless.
                     </Text>
                     <Image
                         source={require('../../images/second.png')}
-                        className="h-[30%] w-[100%]"
+                        className="h-[25%] w-[100%]"
                         style={{ marginTop: 20 }}
                         resizeMode="contain"
                     />

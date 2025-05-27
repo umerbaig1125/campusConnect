@@ -17,7 +17,7 @@ const Forth = ({ onNext, onBack }) => {
                 {/* White overlay with opacity */}
                 <View className="absolute top-0 left-0 right-0 bottom-0 bg-white opacity-60" />
                 <Image
-                    className="h-[80%] w-[50%] mb-6"
+                    className="h-[60%] w-[50%] mb-6"
                     source={require('../../images/logo.png')}
                 />
             </ImageBackground>
@@ -46,13 +46,13 @@ const Forth = ({ onNext, onBack }) => {
 
                 {/* Image now positioned absolutely on top of SVG */}
                 <View className="flex-1 justify-center items-center">
-                    <Text className="text-white text-5xl font-bold">Feedback</Text>
-                    <Text className="text-white text-2xl text-center mt-5">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
+                    <Text className="text-white text-4xl font-bold">Feedback</Text>
+                    <Text className="text-white text-xl text-center mt-5">
+                        Share your thoughts and suggestions to help us improve. Your feedback ensures a better experience for all society members and students.
                     </Text>
                     <Image
                         source={require('../../images/forth.png')}
-                        className="h-[30%] w-[100%]"
+                        className="h-[25%] w-[100%]"
                         style={{ marginTop: 20 }}
                         resizeMode="contain"
                     />

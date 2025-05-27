@@ -74,7 +74,7 @@ const PlayersScreen = () => {
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Ionicons name="chevron-back-sharp" size={30} color="#000" />
                     </TouchableOpacity>
-                    <Text className="text-3xl font-medium text-black ml-2">Registered Players</Text>
+                    <Text className="text-3xl font-medium text-black ml-2">Registered Members</Text>
                 </View>
 
                 {/* Search Bar */}

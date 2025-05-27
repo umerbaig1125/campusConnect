@@ -198,7 +198,7 @@ const MemberProfileScreen = () => {
           />
 
           {/* Notification Setting */}
-          <Text className="text-black font-medium text-2xl mb-2">Notification Setting</Text>
+          {/* <Text className="text-black font-medium text-2xl mb-2">Notification Setting</Text>
 
           <TouchableOpacity
             onPress={() => setSelectedOption('muteAll')}
@@ -222,7 +222,7 @@ const MemberProfileScreen = () => {
               )}
             </View>
             <Text className="text-lg text-black">Mute Other Society Notification</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
         </ScrollView>
 

@@ -88,10 +88,12 @@ const AddEventLeaderScreen = () => {
     try {
       setLoading(true);
       const roleToSocietyName = {
+        'Events Society Leader': 'events',
         'Sports Society Leader': 'sports',
         'Music Society Leader': 'music',
-        'Arts Society Leader': 'arts',
-        'Robotics Society Leader': 'robotics',
+        'Media and Film Society Leader': 'media',
+        'Health and Fitness Leader': 'health',
+        'Debate Society Leader': 'debate',
       };
 
       const societyName = roleToSocietyName[role] || '';
@@ -132,14 +134,13 @@ const AddEventLeaderScreen = () => {
   };
 
   const generateDescription = async () => {
-    if (!eventName || !eventVenue || !image || !date || !time || !selectedSociety) {
+    if (!eventName || !eventVenue || !image || !date || !time) {
       alert('Please fill in all fields (except description) before generating.');
       return;
     }
 
     const prompt = `
 "${eventName}" happening at "${eventVenue}" on ${date.toDateString()} at ${time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.
-The event is organized by the "${selectedSociety}" society.
 
 Write a 300-word professional event description covering:
 1. Event Overview

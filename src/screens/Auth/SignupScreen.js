@@ -19,8 +19,6 @@ const SignupScreen = () => {
   const [loading, setLoading] = useState(false); // Add loading state
 
   // const handleSignup = async () => {
-  //   console.log("press")
-
   //   if (!selectedSociety) {
   //     alert("Please select a society to continue");
   //     return;
@@ -31,17 +29,20 @@ const SignupScreen = () => {
   //     return;
   //   }
 
-  //   // Map selected society to role string
   //   const roleMap = {
+  //     events: 'Events Society Member',
   //     sports: 'Sports Society Member',
   //     music: 'Music Society Member',
-  //     arts: 'Arts Society Member',
-  //     robotics: 'Robotics Society Member'
+  //     media: 'Media and Film Society Member',
+  //     health: 'Health and Fitness Member',
+  //     debate: 'Debate Society Member'
   //   };
 
   //   const role = roleMap[selectedSociety];
 
   //   try {
+  //     setLoading(true); // Start loading
+
   //     const response = await axios.post('https://campus-connect-backend-eight.vercel.app/api/auth/signup', {
   //       name,
   //       email,
@@ -56,17 +57,16 @@ const SignupScreen = () => {
   //     setConfirmPassword('');
   //     setSelectedSociety('');
   //     navigation.navigate('Login');
-
   //   } catch (error) {
   //     console.log('Error during signup', error.response || error.message);
-  //     if (error.response) {
-  //       const errorMessage = error.response.data.message || 'Error during signup';
-  //       if (Platform.OS === 'android') {
-  //         ToastAndroid.show(errorMessage, ToastAndroid.LONG);
-  //       } else {
-  //         alert(errorMessage);
-  //       }
+  //     const errorMessage = error.response?.data?.message || 'Error during signup';
+  //     if (Platform.OS === 'android') {
+  //       ToastAndroid.show(errorMessage, ToastAndroid.LONG);
+  //     } else {
+  //       Alert.alert('Error', errorMessage);
   //     }
+  //   } finally {
+  //     setLoading(false); // End loading
   //   }
   // };
 
@@ -76,16 +76,26 @@ const SignupScreen = () => {
       return;
     }
 
+    if (!email.toLowerCase().endsWith('@iqra.edu.pk')) {
+      Alert.alert(
+        "Invalid Email",
+        "You need to use Iqra University's official email address to register."
+      );
+      return;
+    }
+
     if (password !== Confirmpassword) {
       alert("Passwords do not match");
       return;
     }
 
     const roleMap = {
+      events: 'Events Society Member',
       sports: 'Sports Society Member',
       music: 'Music Society Member',
-      arts: 'Arts Society Member',
-      robotics: 'Robotics Society Member'
+      media: 'Media and Film Society Member',
+      health: 'Health and Fitness Member',
+      debate: 'Debate Society Member'
     };
 
     const role = roleMap[selectedSociety];
@@ -219,10 +229,12 @@ const SignupScreen = () => {
               }}
             >
               <Picker.Item label="Select Society" value="" />
+              <Picker.Item label="Events Society" value="events" />
               <Picker.Item label="Sports Society" value="sports" />
               <Picker.Item label="Music Society" value="music" />
-              <Picker.Item label="Arts Society" value="arts" />
-              <Picker.Item label="Robotics Society" value="robotics" />
+              <Picker.Item label="Media and Film Society" value="media" />
+              <Picker.Item label="Health and Fitness Society" value="health" />
+              <Picker.Item label="Debate Society" value="debate" />
             </Picker>
           </View>
 

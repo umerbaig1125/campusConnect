@@ -21,6 +21,57 @@ const VotingScreen = () => {
     const [hasVoted, setHasVoted] = useState(false); // <-- new state
     const [loading, setLoading] = useState(false); // Add loading state
 
+    const [votingOpen, setVotingOpen] = useState(false);
+    const [checkingVotingTime, setCheckingVotingTime] = useState(true);
+
+    const [EventTitle, setEventTitle] = useState('');
+    const [Eventdate, setEventDate] = useState(new Date())
+
+    useEffect(() => {
+        getStoredCredentials();
+        checkVotingTime(); // <-- Call here
+    }, []);
+
+    const checkVotingTime = async () => {
+        try {
+            const res = await axios.get('https://campus-connect-backend-eight.vercel.app/api/voting/get-time');
+            const { title, date, startTime, endTime } = res.data;
+
+            const now = new Date();
+            const votingDate = new Date(date);
+
+            console.log("res.data", res.data)
+            console.log(res.data.title)
+            console.log(res.data.date)
+            setEventTitle(res.data.title)
+            setEventDate(res.data.date)
+
+            const isToday =
+                now.getDate() === votingDate.getDate() &&
+                now.getMonth() === votingDate.getMonth() &&
+                now.getFullYear() === votingDate.getFullYear();
+
+            if (!isToday) {
+                setVotingOpen(false);
+                return;
+            }
+
+            const start = new Date(startTime); // ✅ correct
+            const end = new Date(endTime);     // ✅ correct
+
+            if (now >= start && now <= end) {
+                setVotingOpen(true);
+            } else {
+                setVotingOpen(false);
+            }
+        } catch (err) {
+            console.error('Error checking voting time:', err);
+            setVotingOpen(false);
+        } finally {
+            setCheckingVotingTime(false);
+        }
+    };
+
     const getSocietyFromRole = (role) => {
         return role.replace(' Member', '').trim();
     };
@@ -100,6 +151,8 @@ const VotingScreen = () => {
                     email: candidate.email,
                 },
                 society: societyName,
+                title: EventTitle,
+                date: Eventdate
             };
 
             const res = await axios.post('https://campus-connect-backend-eight.vercel.app/api/vote', payload);
@@ -151,6 +204,7 @@ const VotingScreen = () => {
         getStoredCredentials();
     }, []);
 
+
     if (!role) {
         return (
             <View className="flex-1 items-center justify-center bg-white">
@@ -170,15 +224,30 @@ const VotingScreen = () => {
             </TouchableOpacity>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                <Text className="text-3xl font-medium mb-4 text-black">
+                <Text className="text-2xl font-medium mb-4 text-black">
                     Vote For {getPresidentTitle()}
                 </Text>
 
-                {candidates.length > 0 ? (
+                {checkingVotingTime ? (
+                    <View className="flex-1 items-center justify-center bg-white">
+                        <ActivityIndicator size="large" color="#000" />
+                        <Text className="text-lg text-black mt-2">Checking voting time...</Text>
+                    </View>
+                ) : (!votingOpen ? (
+                    <View className="flex-1 items-center justify-center bg-white top-16">
+                        <Text className="text-3xl text-black font-bold">Voting is closed</Text>
+                    </View>
+                ) : (candidates.length > 0 ? (
                     candidates.map(renderCandidate)
                 ) : (
                     <Text className="text-gray-500 mt-4">No candidates available</Text>
-                )}
+                )))}
+
+                {/* {candidates.length > 0 ? (
+                    candidates.map(renderCandidate)
+                ) : (
+                    <Text className="text-gray-500 mt-4">No candidates available</Text>
+                )} */}
             </ScrollView>
 
             <BottomNav />

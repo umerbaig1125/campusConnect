@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Picker } from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 
 const ProfileScreen = () => {
@@ -22,6 +23,31 @@ const ProfileScreen = () => {
 
   const [loading, setLoading] = useState(false); // Add loading state
 
+  const [showVoteModal, setShowVoteModal] = useState(false);
+  const [voteTitle, setVoteTitle] = useState('')
+  const [voteDate, setVoteDate] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+
+  useEffect(() => {
+    const fetchVotingData = async () => {
+      const start = await AsyncStorage.getItem('voteStart');
+      const end = await AsyncStorage.getItem('voteEnd');
+
+      if (start && end) {
+        const eligible = checkVotingEligibility(start, end);
+        if (eligible) {
+          navigation.navigate('VotingScreen'); // Replace with actual screen
+        }
+      }
+    };
+
+    fetchVotingData();
+  }, []);
+
   const getStoredCredentials = async () => {
     try {
       const value = await AsyncStorage.getItem('credentials');
@@ -29,12 +55,35 @@ const ProfileScreen = () => {
         const parsed = JSON.parse(value);
         setEmail(parsed.email || '');
         setName(parsed.name || '');
-        if (parsed.imageUri) setImageUri(parsed.imageUri);
+        if (parsed.imageUri) {
+          setImageUri(parsed.imageUri);
+        } else {
+          setImageUri(null); // fallback to dummy image later
+        }
         if (parsed._id) setUserId(parsed._id); // <-- Add this line
       }
     } catch (error) {
       console.error('Error reading credentials from AsyncStorage:', error);
     }
+  };
+
+  const uploadImageToCloudinary = async (uri) => {
+    const data = new FormData();
+    data.append('file', {
+      uri,
+      name: 'profile.jpg',
+      type: 'image/jpg',
+    });
+    data.append('upload_preset', 'your_preset_here'); // from Cloudinary
+    data.append('cloud_name', 'your_cloud_name');
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
+      method: 'POST',
+      body: data,
+    });
+
+    const json = await res.json();
+    return json.secure_url;
   };
 
   const saveCredentials = async () => {
@@ -46,11 +95,12 @@ const ProfileScreen = () => {
     console.log('Selected image URI:', imageUri);
 
     const formData = new FormData();
+    const cloudUrl = await uploadImageToCloudinary(imageUri);
+    formData.append('imageUrl', cloudUrl);
     formData.append('name', name);
     formData.append('email', email);
 
     if (imageUri && !imageUri.startsWith('http')) {
-      // Only append if it's a new image from picker
       const fileName = imageUri.split('/').pop();
       const fileType = fileName.split('.').pop();
 
@@ -62,38 +112,48 @@ const ProfileScreen = () => {
     }
 
     try {
-      setLoading(true);
       const response = await axios.put(
         `https://campus-connect-backend-eight.vercel.app/api/auth/update-profile/${userId}`,
-        { name, email }, // only send simple JSON
+        {
+          name,
+          email,
+          imageUrl: cloudUrl,
+        }, // ✅ send JSON only
         {
           headers: {
             'Content-Type': 'application/json',
           },
         }
-      )
+      );
 
       const updatedUser = response.data.user;
 
-      // Save updated data to AsyncStorage
       await AsyncStorage.setItem(
         'credentials',
         JSON.stringify({
           _id: updatedUser._id,
           name: updatedUser.name,
           email: updatedUser.email,
-          imageUri: `https://campus-connect-backend-eight.vercel.app${updatedUser.imageUrl}`,
+          imageUri: updatedUser.imageUrl
+            ? `https://campus-connect-backend-eight.vercel.app${updatedUser.imageUrl}`
+            : null,
         })
       );
 
       Alert.alert('Success', 'Profile updated successfully!');
-      console.log("Profile updated successfully!")
+      console.log("Profile updated successfully!");
     } catch (error) {
       console.error('Error updating profile:', error.response?.data || error);
       Alert.alert('Error', 'Failed to update profile');
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
+  };
+
+
+  const checkVotingEligibility = (startDateTime, endDateTime) => {
+    const now = new Date();
+    return now >= new Date(startDateTime) && now <= new Date(endDateTime);
   };
 
   const handleImagePick = () => {
@@ -156,6 +216,33 @@ const ProfileScreen = () => {
     });
   }, [navigation, name, email, imageUri]);
 
+  const saveVotingTime = async () => {
+    try {
+      const payload = {
+        title: voteTitle,
+        date: voteDate.toISOString().split('T')[0],
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+      };
+
+      console.log("payload", payload);
+
+      const response = await axios.post('https://campus-connect-backend-eight.vercel.app/api/voting/set-time', payload);
+
+      console.log("response", response)
+
+      // ✅ Store in AsyncStorage for later use
+      await AsyncStorage.setItem('voteStart', payload.startTime);
+      await AsyncStorage.setItem('voteEnd', payload.endTime);
+
+      Alert.alert('Success', 'Voting time saved!');
+      setShowVoteModal(false);
+    } catch (error) {
+      console.error("Error saving voting time:", error.response?.data || error.message);
+      Alert.alert('Error', 'Failed to save voting time');
+    }
+  };
+
   return (
     <View className="flex-1 bg-white pt-4">
       {loading && (
@@ -172,6 +259,9 @@ const ProfileScreen = () => {
             <Text className="text-2xl font-medium text-black ml-2">My Profile</Text>
           </View>
           <View className="flex-row">
+            <TouchableOpacity className="mr-2" onPress={() => setShowVoteModal(true)}>
+              <MaterialIcons name="how-to-vote" size={24} color="#000" />
+            </TouchableOpacity>
             <TouchableOpacity className="mr-2" onPress={() => setShowRoleModal(true)}>
               <Ionicons name="settings-outline" size={24} color="#000" />
             </TouchableOpacity>
@@ -189,7 +279,7 @@ const ProfileScreen = () => {
                 source={
                   imageUri
                     ? { uri: imageUri }
-                    : { uri: 'https://i.pravatar.cc/150?img=5' }
+                    : { uri: 'https://i.pravatar.cc/150?img=5' } // dummy
                 }
                 className="w-24 h-24 rounded-full"
               />
@@ -267,14 +357,19 @@ const ProfileScreen = () => {
                   style={{ color: 'black' }}
                 >
                   <Picker.Item label="Select a role" value="" />
+                  <Picker.Item label="Events Society Leader" value="Events Society Leader" />
                   <Picker.Item label="Sports Society Leader" value="Sports Society Leader" />
                   <Picker.Item label="Music Society Leader" value="Music Society Leader" />
-                  <Picker.Item label="Arts Society Leader" value="Arts Society Leader" />
-                  <Picker.Item label="Robotics Society Leader" value="Robotics Society Leader" />
+                  <Picker.Item label="Media and Film Society Leader" value="Media and Film Society Leader" />
+                  <Picker.Item label="Health and Fitness Leader" value="Health and Fitness Leader" />
+                  <Picker.Item label="Debate Society Leader" value="Debate Society Leader" />
+
+                  <Picker.Item label="Events Society Member" value="Events Society Member" />
                   <Picker.Item label="Sports Society Member" value="Sports Society Member" />
                   <Picker.Item label="Music Society Member" value="Music Society Member" />
-                  <Picker.Item label="Arts Society Member" value="Arts Society Member" />
-                  <Picker.Item label="Robotics Society Member" value="Robotics Society Member" />
+                  <Picker.Item label="Media and Film Society Member" value="Media and Film Society Member" />
+                  <Picker.Item label="Health and Fitness Member" value="Health and Fitness Member" />
+                  <Picker.Item label="Debate Society Member" value="Debate Society Member" />
                 </Picker>
               </View>
 
@@ -297,6 +392,97 @@ const ProfileScreen = () => {
             </View>
           </View>
         </View>
+      )}
+
+      {showVoteModal && (
+        <View className="absolute top-0 left-0 right-0 bottom-0 z-50 bg-black/50 justify-center items-center">
+          <View className="bg-white rounded-xl p-6 w-[90%] max-w-md">
+            <Text className="text-xl font-bold text-center mb-4">Set Voting Time</Text>
+
+            <TextInput
+              className="border border-gray-300 rounded-lg px-4 py-3 mb-4 bg-white text-black"
+              value={voteTitle}
+              onChangeText={setVoteTitle}
+              placeholder="Enter Voting Title"
+              placeholderTextColor="#868686FF"
+            />
+
+            {/* Date Picker */}
+            <TouchableOpacity
+              className="border border-gray-300 rounded-lg px-4 py-3 mb-3 bg-white"
+              onPress={() => setShowDatePicker(true)}
+            >
+              <Text className="text-black">Voting Date: {voteDate.toDateString()}</Text>
+            </TouchableOpacity>
+
+            {/* Start Time Picker */}
+            <TouchableOpacity
+              className="border border-gray-300 rounded-lg px-4 py-3 mb-3 bg-white"
+              onPress={() => setShowStartTimePicker(true)}
+            >
+              <Text className="text-black">Start Time: {startTime.toLocaleTimeString()}</Text>
+            </TouchableOpacity>
+
+            {/* End Time Picker */}
+            <TouchableOpacity
+              className="border border-gray-300 rounded-lg px-4 py-3 mb-4 bg-white"
+              onPress={() => setShowEndTimePicker(true)}
+            >
+              <Text className="text-black">End Time: {endTime.toLocaleTimeString()}</Text>
+            </TouchableOpacity>
+
+            {/* Save Button */}
+            <TouchableOpacity
+              className="bg-[#28648f] rounded-lg py-3 items-center mb-2"
+              onPress={saveVotingTime}
+            >
+              <Text className="text-white font-semibold text-lg">Save</Text>
+            </TouchableOpacity>
+
+            {/* Cancel Button */}
+            <TouchableOpacity onPress={() => setShowVoteModal(false)}>
+              <Text className="text-center text-gray-500">Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      {showDatePicker && (
+        <DateTimePicker
+          value={voteDate}
+          mode="date"
+          display="default"
+          onChange={(e, selectedDate) => {
+            setShowDatePicker(false);
+            if (selectedDate) setVoteDate(selectedDate);
+          }}
+        />
+      )}
+
+      {showStartTimePicker && (
+        <DateTimePicker
+          value={startTime}
+          mode="time"
+          is24Hour={false}
+          display="default"
+          onChange={(e, selectedTime) => {
+            setShowStartTimePicker(false);
+            if (selectedTime) setStartTime(selectedTime);
+          }}
+        />
+      )}
+
+      {showEndTimePicker && (
+        <DateTimePicker
+          value={endTime}
+          mode="time"
+          is24Hour={false}
+          display="default"
+          onChange={(e, selectedTime) => {
+            setShowEndTimePicker(false);
+            if (selectedTime) setEndTime(selectedTime);
+          }}
+        />
       )}
     </View>
   );

@@ -92,6 +92,20 @@ const AllEventsScreen = () => {
                     <Text className="text-black font-bold text-xl">{event.name}</Text>
                     <Text className="text-gray-700 text-base mt-1">{event.time}</Text>
                     <Text className="text-gray-700 text-base font-semibold">{event.venue}</Text>
+                    <TouchableOpacity
+                      className="bg-[#ffe100] justify-center items-center py-1 px-2 w-24 mt-4"
+                      onPress={() => navigation.navigate('EventDetails', {
+                        _id: event._id,
+                        name: event.name,
+                        date: event.date,
+                        time: event.time,
+                        venue: event.venue,
+                        desc: event.description,
+                        image: event.image,
+                      })}
+                    >
+                      <Text className="text-sm text-black">View Details</Text>
+                    </TouchableOpacity>
                   </View>
                   {event.image ? (
                     <Image source={{ uri: event.image }} className="w-16 h-16" resizeMode="contain" />
