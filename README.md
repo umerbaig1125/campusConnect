@@ -63,7 +63,7 @@ Campus Connect bridges the gap between university societies and students by offe
 ![Review](./src/images/7.webp)
 
 ### 📝 Registration  
-![Register](./src/images/1.webp)
+![Register](./src/images/8.webp)
 
 ---
 
