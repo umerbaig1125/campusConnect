@@ -44,26 +44,26 @@ Campus Connect bridges the gap between university societies and students by offe
 ## 📸 Screenshots
 
 ### 🏠 Intro Screen  
-![Intro 1](./CampusConnect/src/images/1.webp)  
-![Intro 2](./CampusConnect/src/images/2.webp)
+![Intro 1](./src/images/1.webp)  
+![Intro 2](./src/images/2.webp)
 
 ### 🔐 Login  
-![Login](./CampusConnect/src/images/3.webp)
+![Login](./src/images/3.webp)
 
 ### 🏡 Home Screen  
-![Home](./CampusConnect/src/images/4.webp)
+![Home](./src/images/4.webp)
 
 ### 📅 Event  
-![Event](./CampusConnect/src/images/5.webp)
+![Event](./src/images/5.webp)
 
 ### ➕ Create Event  
-![Create](./CampusConnect/src/images/6.webp)
+![Create](./src/images/6.webp)
 
 ### 📋 Review  
-![Review](./CampusConnect/src/images/7.webp)
+![Review](./src/images/7.webp)
 
 ### 📝 Registration  
-![Register](./CampusConnect/src/images/1.webp)
+![Register](./src/images/1.webp)
 
 ---
 
