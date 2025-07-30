@@ -1,97 +1,106 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🎓 Campus Connect – University Societies & Events App
 
-# Getting Started
+**Campus Connect** is a mobile-first platform built with React Native to unify all student societies within a university. It enables students to discover upcoming campus events, register online, and even participate in society elections with secure digital voting. Powered by a MERN stack backend, the app modernizes how students interact with campus life.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 🎯 Purpose
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+Campus Connect bridges the gap between university societies and students by offering a centralized digital platform where:
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- All societies can post and manage events.
+- Students can explore, register, and vote in society elections.
+- University life becomes more connected, transparent, and accessible.
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
-```
+## 🧠 Key Features
 
-## Step 2: Build and run your app
+- 🗓 **Event Feed**  
+  View upcoming events posted by various societies with filters by category, date, or popularity.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+- 📝 **Event Registration**  
+  One-tap event registration using a seamless mobile form and auto-filled student data.
 
-### Android
+- 🗳 **Online Voting**  
+  Secure society elections with OTP/email-based verification to prevent vote duplication.
 
-```sh
-# Using npm
-npm run android
+- 👥 **Society Management**  
+  Societies can manage their members, create posts, and track registrations via admin panel.
 
-# OR using Yarn
-yarn android
-```
+- 📣 **Push Notifications**  
+  Notify students of event reminders, voting deadlines, and announcements in real time.
 
-### iOS
+- 📌 **User Roles**  
+  - **Student**: Register for events, vote, view results  
+  - **Society Admin**: Post/manage events, manage elections  
+  - **Super Admin**: Monitor all societies and activities
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+- 🌐 **AI-Powered Recommendations** *(optional)*  
+  Suggest events based on user interests, previous registrations, and location (future scope).
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+---
 
-```sh
-bundle install
-```
+## 📸 Screenshots
 
-Then, and every time you update your native dependencies, run:
+### 🏠 Intro Screen  
+![Intro 1](./CampusConnect/src/images/1.webp)  
+![Intro 2](./CampusConnect/src/images/2.webp)
 
-```sh
-bundle exec pod install
-```
+### 🔐 Login  
+![Login](./CampusConnect/src/images/3.webp)
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### 🏡 Home Screen  
+![Home](./CampusConnect/src/images/4.webp)
 
-```sh
-# Using npm
-npm run ios
+### 📅 Event  
+![Event](./CampusConnect/src/images/5.webp)
 
-# OR using Yarn
-yarn ios
-```
+### ➕ Create Event  
+![Create](./CampusConnect/src/images/6.webp)
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### 📋 Review  
+![Review](./CampusConnect/src/images/7.webp)
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### 📝 Registration  
+![Register](./CampusConnect/src/images/1.webp)
 
-## Step 3: Modify your app
+---
 
-Now that you have successfully run the app, let's make changes!
+## 🛠 Tech Stack
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+| Layer         | Technology                                   |
+|---------------|-----------------------------------------------|
+| **Frontend**  | React Native, React Navigation                |
+| **Backend**   | Node.js, Express.js                           |
+| **Database**  | MongoDB (Mongoose)                            |
+| **State Mgmt**| Context API / Redux (optional)                |
+| **Auth**      | JWT, Email Verification (Nodemailer)          |
+| **AI Logic**  | Basic event suggestion model (optional)       |
+| **Others**    | Firebase (optional), Cloudinary, Expo Notifications |
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+---
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## 🚀 How to Run Locally
 
-## Congratulations! :tada:
+### 📱 React Native Frontend
 
-You've successfully run and modified your React Native App. :partying_face:
+```bash
+cd campus-connect-app
+npm install
+npx react-native run-android   # For Android
+npx react-native run-ios       # For iOS (macOS only)
 
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+🌐 Node Backend (Express API)
+bash
+Copy
+Edit
+cd campus-connect-backend
+npm install
+npm run dev
+👨‍💻 Developed by
+Muhammad Umer Baig
+React Native | MERN Stack Developer
+📧 umerbaig1125@gmail.com
+🌐 Portfolio
+💼 LinkedIn
