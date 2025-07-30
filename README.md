@@ -62,9 +62,6 @@ Campus Connect bridges the gap between university societies and students by offe
 ### 📋 Review  
 ![Review](./src/images/7.webp)
 
-### 📝 Registration  
-![Register](./src/images/8.webp)
-
 ---
 
 ## 🛠 Tech Stack
