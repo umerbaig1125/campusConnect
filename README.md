@@ -85,22 +85,21 @@ Campus Connect bridges the gap between university societies and students by offe
 
 ### 📱 React Native Frontend
 
-```bash
 cd campus-connect-app
 npm install
 npx react-native run-android   # For Android
 npx react-native run-ios       # For iOS (macOS only)
 
 🌐 Node Backend (Express API)
-bash
-Copy
-Edit
+
 cd campus-connect-backend
 npm install
 npm run dev
-👨‍💻 Developed by
-Muhammad Umer Baig
-React Native | MERN Stack Developer
-📧 umerbaig1125@gmail.com
-🌐 Portfolio
-💼 LinkedIn
+
+## 👨‍💻 Developed by
+
+**Muhammad Umer Baig**  
+React Native | MERN Stack Developer  
+📧 [umerbaig1125@gmail.com](mailto:umerbaig1125@gmail.com)  
+🌐 [Portfolio](https://my-portfolio-khaki-two-96.vercel.app/)  
+💼 [LinkedIn](https://www.linkedin.com/in/umer-baig-435206126/)
