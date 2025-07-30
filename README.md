@@ -82,15 +82,16 @@ Campus Connect bridges the gap between university societies and students by offe
 
 ### 📱 React Native Frontend
 
-cd campus-connect-app
-npm install
-npx react-native run-android   # For Android
+```bash```
+cd campus-connect-app  
+npm install  
+npx react-native run-android   # For Android  
 npx react-native run-ios       # For iOS (macOS only)
 
 🌐 Node Backend (Express API)
 
-cd campus-connect-backend
-npm install
+cd campus-connect-backend  
+npm install  
 npm run dev
 
 ## 👨‍💻 Developed by
